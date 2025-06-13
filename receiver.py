@@ -7,7 +7,7 @@ import sounddevice as sd
 SAMPLE_RATE =48000  
 CHANNELS = 2
 CHUNK_SIZE = 1024
-SERVER_IP = '192.168.0.103'
+SERVER_IP = '192.168.0.102'
 PORT = 50007
 
 audio_queue = queue.Queue(maxsize=20)
@@ -44,7 +44,14 @@ def receive_audio():
             data = sock.recv(CHUNK_SIZE*CHANNELS*2)
             if not data:
                 break
-            audio = np.frombuffer(data, dtype=np.int16).reshape(-1, CHANNELS)/32767
+            audio = np.frombuffer(data, dtype=np.int16).astype(np.float32)/32767.0
+            audio = audio.reshape(-1, CHANNELS)
+
+            if audio.shape[0] < CHUNK_SIZE:
+                pad_len = CHUNK_SIZE - audio.shape[0]
+                audio = np.pad(audio, ((0, pad_len), (0, 0)), mode='constant')
+            elif audio.shape[0] > CHUNK_SIZE:
+                audio = audio[:CHUNK_SIZE, :]
             audio_queue.put(audio)
     except Exception as e:
         print(f'ERROR: {e}')
