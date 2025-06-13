@@ -7,7 +7,7 @@ import time
 
 SAMPLE_RATE = 48000
 CHANNEL = 2
-CHUNK_SIZE = 1024
+CHUNK_SIZE = 512
 PORT = 50007
 
 speaker = sc.default_speaker()

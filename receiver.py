@@ -6,11 +6,11 @@ import sounddevice as sd
 
 SAMPLE_RATE =48000  
 CHANNELS = 2
-CHUNK_SIZE = 1024
+CHUNK_SIZE = 512
 SERVER_IP = '192.168.0.102'
 PORT = 50007
 
-audio_queue = queue.Queue(maxsize=20)
+audio_queue = queue.Queue(maxsize=5)
 
 #CONNECT TO SERVER
 
